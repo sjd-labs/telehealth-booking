@@ -1,5 +1,7 @@
 # MedConnect — AI Navigation Guide
 
+> ⚠️ **RETIRED 2026-11-02.** No commit since 2026-03-20; unmaintained and undeployed from this checkout. The local-coder-delegation section was removed (that workflow was retired 2026-05-07).
+
 ## What This Project Is
 
 MedConnect is a multi-tenant telehealth booking platform built by SJD Labs, LLC as a portfolio piece. It demonstrates healthcare domain expertise for freelance acquisition. All patient data is synthetic (Synthea-generated). See `specs/SPEC-INDEX.md` for the full specification index.
@@ -99,23 +101,6 @@ pnpm db:migrate       # Run Prisma migrations
 pnpm db:seed          # Seed with Synthea synthetic data
 pnpm db:reset         # Reset + reseed database
 ```
-
-## Coder Agent Limits
-
-These areas are too complex for local coder agents — Opus must handle directly:
-
-| Area | Why |
-|------|-----|
-| `apps/api/src/modules/appointments/` | Availability engine + slot reservation + state machine — cross-file coordination required |
-| `apps/api/src/modules/payments/` | Stripe Connect integration, application fees, webhook processing — financial correctness critical |
-| `apps/api/src/modules/video/` | Twilio room lifecycle tied to appointment state machine — timing and state coupling |
-| `apps/api/src/common/` | Guards, interceptors, pipes shared across all modules — blast radius of changes is high |
-| `apps/api/src/prisma/` | PrismaService, RLS extensions, tenant context — foundational to all data access |
-| `prisma/schema.prisma` | Central schema — changes cascade to generated types, migrations, and all modules |
-| Prisma migration files | Never edit directly — always use `pnpm db:migrate` |
-| `packages/shared/` schemas that touch >3 modules | Zod schemas imported by both API and web — breaking changes propagate everywhere |
-| Changes touching RLS policies | Row-Level Security misconfiguration = data leak across practices |
-| `apps/web/src/app/book/` | Multi-step booking flow (slot → intake → pay → confirm) — complex client state coordination |
 
 ## Non-Obvious Conventions
 
